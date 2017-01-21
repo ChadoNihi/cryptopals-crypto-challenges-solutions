@@ -1,9 +1,5 @@
 defmodule HexToBase64 do
-  def hex_to_64!(number_string) do
-    if !String.match?(number_string, ~r/^[0-9a-f]$/i) do
-      raise ArgumentError
-    else
-      
-    end
-  end
+  def hex_to_64(hex_str) do
+    Base.decode16(hex_str, case: :mixed) |> elem(1)
+    |> Base.encode64
 end
