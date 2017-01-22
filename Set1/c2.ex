@@ -8,8 +8,9 @@ defmodule HexToBase64 do
       rev_bin = Enum.zip(hex_str_to_bin_list(hex_str1), hex_str_to_bin_list(hex_str2))
       |> Enum.reduce([], fn({d1, d2}, acc) -> [d1 ^^^ d2 | acc] end)
 
-      Enum.reduce({[], Enum.count(rev_bin)-1}, fn(d, {li, pow}) -> {[:math.pow(d, pow) | li], pow-1} end)
-      |> Enum.join
+      Enum.reduce(rev_bin, {[], Enum.count(rev_bin)-1}, fn(d, {li, pow}) -> {[:math.pow(d, pow) | li], pow-1} end)
+      |> elem(0)
+      |> Enum.join("")
       |> String.to_integer(16)
     end
   end
@@ -17,7 +18,7 @@ defmodule HexToBase64 do
   defp hex_str_to_bin_list(hex_str) do
     String.graphemes(hex_str)
     |> List.foldr([], fn(hex_d, acc) -> [hex_dig_to_bin(hex_d) | acc] end)
-    |> Enum.flatten
+    |> List.flatten
   end
 
   defp hex_dig_to_bin(d) do
